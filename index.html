@@ -36,14 +36,6 @@
 
 			let mesh, material;
 
-			// Sync settings to material manually on init
-			material.aoMapIntensity = settings.aoMapIntensity;
-			material.envMapIntensity = settings.envMapIntensity;
-			material.metalness = settings.metalness;
-			material.roughness = settings.roughness;
-			ambientLight.intensity = settings.ambientIntensity;
-			material.normalScale.set(1, -1).multiplyScalar(settings.normalScale);
-			material.displacementScale = settings.displacementScale;
 
 			let pointLight, ambientLight;
 
