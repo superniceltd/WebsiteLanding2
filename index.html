@@ -150,9 +150,9 @@
 				// textures
 
 				const textureLoader = new THREE.TextureLoader();
-				const normalMap = textureLoader.load( 'models/obj/ninja/normal.png' );
-				const aoMap = textureLoader.load( 'models/obj/ninja/ao.jpg' );
-				const displacementMap = textureLoader.load( 'models/obj/ninja/displacement.jpg' );
+				const normalMap = textureLoader.load( 'models/obj/smiley/normal.jpg' );
+				const aoMap = textureLoader.load( 'models/obj/smiley/ao.jpg' );
+				//const displacementMap = textureLoader.load( 'models/obj/ninja/displacement.jpg' );
 
 				// material
 
@@ -168,10 +168,10 @@
 					aoMap: aoMap,
 					aoMapIntensity: 1,
 
-					displacementMap: displacementMap,
+					/*displacementMap: displacementMap,
 					displacementScale: settings.displacementScale,
 					displacementBias: - 0.428408, // from original model
-
+					*/
 					envMap: reflectionCube,
 					envMapIntensity: settings.envMapIntensity,
 
@@ -182,7 +182,7 @@
 				//
 
 				const loader = new OBJLoader();
-				loader.load( 'models/obj/ninja/ninjaHead_Low.obj', function ( group ) {
+				loader.load( 'models/obj/smiley/smiley.obj', function ( group ) {
 
 					const geometry = group.children[ 0 ].geometry;
 					geometry.center();
