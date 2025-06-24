@@ -27,9 +27,9 @@
 			const settings = {
 				metalness: 1.0,
 				roughness: 0.03,
-				ambientIntensity: 0.2,
+				ambientIntensity: 0.1,
 				aoMapIntensity: 0.2,
-				envMapIntensity: 2.5,
+				envMapIntensity: 2.0,
 				displacementScale: 2.436143, // from original model
 				normalScale: 1.0
 			};
@@ -124,17 +124,18 @@
 				ambientLight = new THREE.AmbientLight( 0xffffff, settings.ambientIntensity );
 				scene.add( ambientLight );
 
-				pointLight = new THREE.PointLight( 0x66FF66, 1.5, 0, 0 );
+				pointLight = new THREE.PointLight( 0x66FF66, 3, 0, 0 );
 				pointLight.position.z = 2500;
 				scene.add( pointLight );
 
-				const pointLight2 = new THREE.PointLight( 0xff6666, 3, 0, 0 );
+				/*const pointLight2 = new THREE.PointLight( 0x66FF66, 3, 0, 0 );
 				camera.add( pointLight2 );
 
 				const pointLight3 = new THREE.PointLight( 0x0000ff, 1.5, 0, 0 );
 				pointLight3.position.x = - 1000;
 				pointLight3.position.z = 1000;
 				scene.add( pointLight3 );
+				*/
 
 				// env map
 
