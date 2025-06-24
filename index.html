@@ -275,7 +275,7 @@
 					shader.vertexShader = shader.vertexShader.replace(
 						'#include <begin_vertex>',
 						`
-						float displacement = snoise(position);
+						float displacement = snoise(position) * 0.5 + 0.5;
 						vec3 transformed = position + normal * displacement * amplitude;
 						`
 					);
