@@ -166,7 +166,7 @@
 				const textureLoader = new THREE.TextureLoader();
 				const normalMap = textureLoader.load( 'models/obj/smiley/normal.jpg' );
 				const aoMap = textureLoader.load( 'models/obj/smiley/ao.jpg' );
-				const noise = generateNoiseTexture();
+				noise = generateNoiseTexture();
 				//const displacementMap = textureLoader.load( 'models/obj/ninja/displacement.jpg' );
 
 				// material
@@ -266,7 +266,7 @@
 				for (let y = 0; y < size; y++) {
 					for (let x = 0; x < size; x++) {
 						const i = (y * size + x) * 4;
-						const value = (simplex.noise2D(x * 0.05, y * 0.05 + time) + 1) * 0.5;
+						const value = (noise2D(x * 0.05, y * 0.05 + time) + 1) * 0.5;
 						const grayscale = value * 255;
 
 						data[i] = data[i + 1] = data[i + 2] = grayscale;
