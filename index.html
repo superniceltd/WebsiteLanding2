@@ -216,33 +216,38 @@
 				} );
 
 				material.onBeforeCompile = (shader) => {
-				// Add a uniform for time
-				shader.uniforms.time = { value: 0.0 };
+					// Add a uniform for time
+					shader.uniforms.time = { value: 0.0 };
 
-				// Inject noise function and custom logic into vertex shader
-				shader.vertexShader = `
-					uniform float time;
-					varying vec3 vNormal;
+					// Inject a simple fake noise function into the vertex shader
+					shader.vertexShader = shader.vertexShader.replace(
+						'void main() {',
+						`
+						uniform float time;
+						
+						// Simple animated noise using sin() — you can replace this with more advanced noise
+						float snoise(vec3 p) {
+						return sin(p.x * 0.5 + time) * 0.25 +
+								sin(p.y * 0.7 + time * 1.2) * 0.25 +
+								sin(p.z * 0.9 + time * 0.8) * 0.25;
+						}
 
-					// Simple 3D noise function (GLSL-style fake noise)
-					float snoise(vec3 p) {
-					return sin(p.x * 0.5 + time) * 0.25 +
-							sin(p.y * 0.7 + time * 1.2) * 0.25 +
-							sin(p.z * 0.9 + time * 0.8) * 0.25;
-					}
-				` + shader.vertexShader;
+						void main() {
+						`
+					);
 
-				shader.vertexShader = shader.vertexShader.replace(
-					'#include <begin_vertex>',
-					`
-					float displacement = snoise(position);
-					vec3 transformed = position + normal * displacement * ${settings.displacementScale.toFixed(2)};
-					`
-				);
+					// Replace the vertex transform line
+					shader.vertexShader = shader.vertexShader.replace(
+						'#include <begin_vertex>',
+						`
+						float displacement = snoise(position);
+						vec3 transformed = position + normal * displacement * ${settings.displacementScale.toFixed(2)};
+						`
+					);
 
-				// Save reference to update uniform later
-				material.userData.shader = shader;
-				};
+					// Store shader so we can update `time` later
+					material.userData.shader = shader;
+					};
 
 
 				//
