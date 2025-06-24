@@ -35,6 +35,7 @@
 
 			let stats;
 			let camera, scene, renderer, controls;
+			let cubeCamera, cubeRenderTarget;
 
 			
 			const noise2D = createNoise2D();
@@ -177,11 +178,37 @@
 
 				scene = new THREE.Scene();
 
+				// Create video wall
+
 				const video = document.getElementById('bg-video');
-				const videoTexture = new THREE.VideoTexture(video);
-				videoTexture.mapping = THREE.EquirectangularReflectionMapping;
-				videoTexture.colorSpace = THREE.SRGBColorSpace; // helps preserve video color
-				scene.environment = videoTexture;
+				video.play();
+
+				const videoTex = new THREE.VideoTexture(video);
+				videoTex.colorSpace = THREE.SRGBColorSpace;
+
+				// Create a curved plane or cylinder
+				const radius = 1000;
+				const height = 1000;
+				const segments = 64;
+
+				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, 0, Math.PI);
+				geometry.scale(-1, 1, 1); // Invert normals to face inward
+
+				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
+				const videoMesh = new THREE.Mesh(geometry, videoMat);
+				videoMesh.position.z = -200; // adjust as needed
+				scene.add(videoMesh);
+
+				// Cube Camera for dynamic reflections
+				cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+				format: THREE.RGBAFormat,
+				generateMipmaps: true,
+				minFilter: THREE.LinearMipmapLinearFilter
+				});
+				cubeCamera = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
+
+				// We'll attach the cubeCamera update logic later
+
 
 				
 
@@ -421,6 +448,18 @@
 			}
 
 			function render() {
+
+				if (mesh && material) {
+				mesh.visible = false; // hide it from its own reflection
+				cubeCamera.position.copy(mesh.position);
+				cubeCamera.update(renderer, scene);
+				mesh.visible = true;
+
+				if (material.envMap !== cubeRenderTarget.texture) {
+					material.envMap = cubeRenderTarget.texture;
+					material.needsUpdate = true;
+				}
+				}
 
 				if (material.userData.shader) {
 				material.userData.shader.uniforms.time.value = performance.now() * 0.001;
