@@ -192,7 +192,7 @@
 				const segments = 64;
 
 				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, 0, Math.PI);
-				geometry.scale(-1, 1, 1); // Invert normals to face inward
+				geometry.scale(1, 1, 1); // Invert normals to face inward
 
 				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
 				const videoMesh = new THREE.Mesh(geometry, videoMat);
