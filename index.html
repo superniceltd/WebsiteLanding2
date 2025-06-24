@@ -50,7 +50,17 @@
 				noiseSpeedX: 10,
 				noiseSpeedY: 5,
 				noiseOctaves: 3,
-				noiseFalloff: 0.5
+				noiseFalloff: 0.5,
+
+				vertexDisplacement: {
+					amplitude: 1.0,
+					frequencyX: 0.5,
+					frequencyY: 0.7,
+					frequencyZ: 0.9,
+					speed: 1.0
+				}
+
+
 			};
 
 			let mesh, material;
@@ -122,10 +132,29 @@
 				gui.add(settings, 'noiseOctaves').min(1).max(8).step(1).name('Noise Octaves');
 				gui.add(settings, 'noiseFalloff').min(0.1).max(1).step(0.05).name('Noise Falloff');
 
+				const noiseFolder = gui.addFolder('Vertex Displacement');
+				noiseFolder.add(settings.vertexDisplacement, 'amplitude', 0, 5).step(0.01).onChange(() => updateShaderUniforms());
+				noiseFolder.add(settings.vertexDisplacement, 'frequencyX', 0, 5).step(0.01).onChange(() => updateShaderUniforms());
+				noiseFolder.add(settings.vertexDisplacement, 'frequencyY', 0, 5).step(0.01).onChange(() => updateShaderUniforms());
+				noiseFolder.add(settings.vertexDisplacement, 'frequencyZ', 0, 5).step(0.01).onChange(() => updateShaderUniforms());
+				noiseFolder.add(settings.vertexDisplacement, 'speed', 0, 5).step(0.01).onChange(() => updateShaderUniforms());
+
 
 
 			}
 			// TESTING COMMENT
+
+			function updateShaderUniforms() {
+				if (!material.userData.shader) return;
+
+				const uniforms = material.userData.shader.uniforms;
+				uniforms.amplitude.value = settings.vertexDisplacement.amplitude;
+				uniforms.freqX.value = settings.vertexDisplacement.frequencyX;
+				uniforms.freqY.value = settings.vertexDisplacement.frequencyY;
+				uniforms.freqZ.value = settings.vertexDisplacement.frequencyZ;
+				uniforms.speed.value = settings.vertexDisplacement.speed;
+				}
+
 
 			function init() {
 
@@ -216,36 +245,41 @@
 				} );
 
 				material.onBeforeCompile = (shader) => {
-					// Add a uniform for time
 					shader.uniforms.time = { value: 0.0 };
+					shader.uniforms.amplitude = { value: settings.vertexDisplacement.amplitude };
+					shader.uniforms.freqX = { value: settings.vertexDisplacement.frequencyX };
+					shader.uniforms.freqY = { value: settings.vertexDisplacement.frequencyY };
+					shader.uniforms.freqZ = { value: settings.vertexDisplacement.frequencyZ };
+					shader.uniforms.speed = { value: settings.vertexDisplacement.speed };
 
-					// Inject a simple fake noise function into the vertex shader
 					shader.vertexShader = shader.vertexShader.replace(
 						'void main() {',
 						`
 						uniform float time;
-						
-						// Simple animated noise using sin() — you can replace this with more advanced noise
+						uniform float amplitude;
+						uniform float freqX;
+						uniform float freqY;
+						uniform float freqZ;
+						uniform float speed;
+
 						float snoise(vec3 p) {
-						return sin(p.x * 0.5 + time) * 0.25 +
-								sin(p.y * 0.7 + time * 1.2) * 0.25 +
-								sin(p.z * 0.9 + time * 0.8) * 0.25;
+						return sin(p.x * freqX + time * speed) * 0.33 +
+								sin(p.y * freqY + time * speed) * 0.33 +
+								sin(p.z * freqZ + time * speed) * 0.33;
 						}
 
 						void main() {
 						`
 					);
 
-					// Replace the vertex transform line
 					shader.vertexShader = shader.vertexShader.replace(
 						'#include <begin_vertex>',
 						`
 						float displacement = snoise(position);
-						vec3 transformed = position + normal * displacement * ${settings.displacementScale.toFixed(2)};
+						vec3 transformed = position + normal * displacement * amplitude;
 						`
 					);
 
-					// Store shader so we can update `time` later
 					material.userData.shader = shader;
 					};
 
