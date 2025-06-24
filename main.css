@@ -21,7 +21,7 @@ canvas {
   height: 100%;
   object-fit: cover; /* ensures video fills the area */
   z-index: 0;
-  display: block; /* if you're temporarily showing it */
+  
 }
 
 
