@@ -19,7 +19,7 @@
 			import { OrbitControls } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/controls/OrbitControls.js';
 			import { OBJLoader } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/loaders/OBJLoader.js';
 			import Stats from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/stats.module.js';
-			import { GUI } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/lil-gui.module.min.js';
+			//import { GUI } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/lil-gui.module.min.js';
 
 			let stats;
 			let camera, scene, renderer, controls;
@@ -44,10 +44,10 @@
 			let r = 0.0;
 
 			init();
-			initGui();
+			//initGui();
 
 			// Init gui
-			function initGui() {
+			/*function initGui() {
 
 				const gui = new GUI();
 				//let gui = gui.addFolder( "Material" );
@@ -93,7 +93,7 @@
 
 				} );
 
-			}
+			}*/
 
 			function init() {
 
@@ -167,7 +167,7 @@
 					normalScale: new THREE.Vector2( 1, - 1 ), // why does the normal map require negation in this case?
 
 					aoMap: aoMap,
-					aoMapIntensity: 1,
+					aoMapIntensity: settings.aoMapIntensity,
 
 					/*displacementMap: displacementMap,
 					displacementScale: settings.displacementScale,
@@ -179,6 +179,7 @@
 					side: THREE.DoubleSide
 
 				} );
+
 
 				//
 
