@@ -11,7 +11,7 @@
 
 		
 
-		
+		<script src="https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/simplex-noise.min.js"></script>
 
 		<script type="module">
 
@@ -23,6 +23,8 @@
 
 			let stats;
 			let camera, scene, renderer, controls;
+
+			const simplex = new window.SimplexNoise();
 
 			const settings = {
 				metalness: 1.0,
@@ -94,6 +96,7 @@
 				} );
 
 			}
+			// TESTING COMMENT
 
 			function init() {
 
@@ -233,27 +236,42 @@
 				const imageData = context.createImageData(size, size);
 				const data = imageData.data;
 
-				for (let i = 0; i < data.length; i += 4) {
-					const v = Math.floor(Math.random() * 255);
-					data[i] = data[i + 1] = data[i + 2] = v; // grayscale
-					data[i + 3] = 255;
-				}
-
-				context.putImageData(imageData, 0, 0);
 				const texture = new THREE.CanvasTexture(canvas);
 				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-				return { texture, canvas, context, imageData };
+				texture.needsUpdate = true;
+
+				return {
+					texture,
+					canvas,
+					context,
+					imageData,
+					data,
+					size
+				};
 			}
+
 			//
 			function updateNoiseTexture() {
-				const { data } = noise.imageData;
-				for (let i = 0; i < data.length; i += 4) {
-					const v = Math.floor(Math.random() * 255);
-					data[i] = data[i + 1] = data[i + 2] = v;
+				const imageData = noiseCanvasCtx.createImageData(canvasSize, canvasSize);
+				const time = performance.now() * 0.001;
+
+				for (let y = 0; y < canvasSize; y++) {
+					for (let x = 0; x < canvasSize; x++) {
+						const value = (simplex.noise2D(x * 0.05, y * 0.05 + time) + 1) * 0.5;
+						const cell = (y * canvasSize + x) * 4;
+						const grayscale = value * 255;
+
+						imageData.data[cell] = grayscale;
+						imageData.data[cell + 1] = grayscale;
+						imageData.data[cell + 2] = grayscale;
+						imageData.data[cell + 3] = 255;
+					}
 				}
-				noise.context.putImageData(noise.imageData, 0, 0);
-				noise.texture.needsUpdate = true;
-			}
+
+	noiseCanvasCtx.putImageData(imageData, 0, 0);
+	noiseTexture.needsUpdate = true;
+}
+
 
 			function animate() {
 
