@@ -44,7 +44,8 @@
 				normalScale: 1.0
 			};
 
-			let mesh, material, noise;
+			let mesh, material;
+			let noise;
 
 
 			let pointLight, ambientLight;
@@ -260,6 +261,7 @@
 
 			//
 			function updateNoiseTexture() {
+				if (!noise) return;
 				const { context, imageData, data, size, texture } = noise;
 				const time = performance.now() * 0.001;
 
