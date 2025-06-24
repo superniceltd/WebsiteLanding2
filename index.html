@@ -312,17 +312,7 @@
 
 				} );
 
-				// TEMP TEST SPHERE TO VERIFY VIDEO REFLECTION
-				const testSphereGeo = new THREE.SphereGeometry(100, 32, 32);
-				const testMat = new THREE.MeshStandardMaterial({
-				metalness: 1,
-				roughness: 0,
-				envMap: videoTexture,
-				envMapIntensity: 1
-				});
-				const testSphere = new THREE.Mesh(testSphereGeo, testMat);
-				testSphere.position.set(-400, 0, 0);
-				scene.add(testSphere);
+			
 
 				//
 
