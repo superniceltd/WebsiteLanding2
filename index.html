@@ -19,7 +19,7 @@
 			import { OrbitControls } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/controls/OrbitControls.js';
 			import { OBJLoader } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/loaders/OBJLoader.js';
 			import Stats from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/stats.module.js';
-			//import { GUI } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/lil-gui.module.min.js';
+			import { GUI } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/lil-gui.module.min.js';
 
 			let stats;
 			let camera, scene, renderer, controls;
@@ -44,10 +44,10 @@
 			let r = 0.0;
 
 			init();
-			//initGui();
+			initGui();
 
 			// Init gui
-			/*function initGui() {
+			function initGui() {
 
 				const gui = new GUI();
 				//let gui = gui.addFolder( "Material" );
@@ -93,7 +93,7 @@
 
 				} );
 
-			}*/
+			}
 
 			function init() {
 
@@ -118,6 +118,7 @@
 				controls = new OrbitControls( camera, renderer.domElement );
 				controls.enableZoom = false;
 				controls.enableDamping = true;
+				controls.enablePan = false;
 
 				// lights
 
@@ -154,6 +155,7 @@
 				const textureLoader = new THREE.TextureLoader();
 				const normalMap = textureLoader.load( 'models/obj/smiley/normal.jpg' );
 				const aoMap = textureLoader.load( 'models/obj/smiley/ao.jpg' );
+				const noise = generateNoiseTexture();
 				//const displacementMap = textureLoader.load( 'models/obj/ninja/displacement.jpg' );
 
 				// material
@@ -170,8 +172,8 @@
 					aoMap: aoMap,
 					aoMapIntensity: settings.aoMapIntensity,
 
-					/*displacementMap: displacementMap,
-					displacementScale: settings.displacementScale,
+					displacementMap: noise.texture,
+					/*displacementScale: settings.displacementScale,
 					displacementBias: - 0.428408, // from original model
 					*/
 					envMap: reflectionCube,
@@ -222,7 +224,36 @@
 
 			}
 
+			function generateNoiseTexture(size = 256) {
+				const canvas = document.createElement('canvas');
+				canvas.width = size;
+				canvas.height = size;
+
+				const context = canvas.getContext('2d');
+				const imageData = context.createImageData(size, size);
+				const data = imageData.data;
+
+				for (let i = 0; i < data.length; i += 4) {
+					const v = Math.floor(Math.random() * 255);
+					data[i] = data[i + 1] = data[i + 2] = v; // grayscale
+					data[i + 3] = 255;
+				}
+
+				context.putImageData(imageData, 0, 0);
+				const texture = new THREE.CanvasTexture(canvas);
+				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+				return { texture, canvas, context, imageData };
+			}
 			//
+			function updateNoiseTexture() {
+				const { data } = noise.imageData;
+				for (let i = 0; i < data.length; i += 4) {
+					const v = Math.floor(Math.random() * 255);
+					data[i] = data[i + 1] = data[i + 2] = v;
+				}
+				noise.context.putImageData(noise.imageData, 0, 0);
+				noise.texture.needsUpdate = true;
+			}
 
 			function animate() {
 
@@ -240,6 +271,8 @@
 				pointLight.position.z = 2500 * Math.sin( r );
 
 				r += 0.01;
+
+				updateNoiseTexture();
 
 				renderer.render( scene, camera );
 
