@@ -36,7 +36,7 @@
 				normalScale: 1.0
 			};
 
-			let mesh, material;
+			let mesh, material, noise;
 
 
 			let pointLight, ambientLight;
@@ -252,25 +252,23 @@
 
 			//
 			function updateNoiseTexture() {
-				const imageData = noiseCanvasCtx.createImageData(canvasSize, canvasSize);
+				const { context, imageData, data, size, texture } = noise;
 				const time = performance.now() * 0.001;
 
-				for (let y = 0; y < canvasSize; y++) {
-					for (let x = 0; x < canvasSize; x++) {
+				for (let y = 0; y < size; y++) {
+					for (let x = 0; x < size; x++) {
+						const i = (y * size + x) * 4;
 						const value = (simplex.noise2D(x * 0.05, y * 0.05 + time) + 1) * 0.5;
-						const cell = (y * canvasSize + x) * 4;
 						const grayscale = value * 255;
 
-						imageData.data[cell] = grayscale;
-						imageData.data[cell + 1] = grayscale;
-						imageData.data[cell + 2] = grayscale;
-						imageData.data[cell + 3] = 255;
+						data[i] = data[i + 1] = data[i + 2] = grayscale;
+						data[i + 3] = 255;
 					}
 				}
 
-	noiseCanvasCtx.putImageData(imageData, 0, 0);
-	noiseTexture.needsUpdate = true;
-}
+				context.putImageData(imageData, 0, 0);
+				texture.needsUpdate = true;
+			}
 
 
 			function animate() {
