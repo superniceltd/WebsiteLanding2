@@ -20,11 +20,12 @@
 			import { OBJLoader } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/loaders/OBJLoader.js';
 			import Stats from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/stats.module.js';
 			import { GUI } from 'https://superniceltd.github.io/WebsiteLanding2/jsm/libs/lil-gui.module.min.js';
-			import SimplexNoise from 'https://cdn.skypack.dev/simplex-noise';
-
+			import * as Simplex from 'https://cdn.skypack.dev/simplex-noise';
+			console.log(Simplex); // See what's actually exported
 			let stats;
 			let camera, scene, renderer, controls;
 
+			
 			const simplex = new SimplexNoise();
 
 			const settings = {
