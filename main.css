@@ -8,6 +8,10 @@ body {
 	overscroll-behavior: none;
 }
 
+canvas {
+  background: transparent !important;
+}
+
 a {
 	color: #ff0;
 	text-decoration: none;
