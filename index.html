@@ -196,6 +196,7 @@
 
 				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
 				const videoMesh = new THREE.Mesh(geometry, videoMat);
+				videoMesh.layers.set(1);
 				videoMesh.position.z = -200; // adjust as needed
 				scene.add(videoMesh);
 
@@ -206,6 +207,7 @@
 				minFilter: THREE.LinearMipmapLinearFilter
 				});
 				cubeCamera = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
+				cubeCamera.layers.set(1);
 
 				// We'll attach the cubeCamera update logic later
 
