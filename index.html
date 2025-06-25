@@ -498,6 +498,21 @@
 
 		</script>
 
+		<script>
+		window.addEventListener("message", (event) => {
+			if (event.data === "playVideo") {
+			const video = document.getElementById("bg-video");
+			if (video) {
+				video.muted = true;
+				video.play().catch((e) => {
+				console.error("Playback failed:", e);
+				});
+			}
+			}
+		});
+		</script>
+
+
 	</body>
 
 </html>
