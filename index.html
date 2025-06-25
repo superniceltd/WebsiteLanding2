@@ -9,9 +9,17 @@
 
 	<body>
 
-		<video id="bg-video" autoplay muted loop playsinline style="display: none;" crossorigin="anonymous">
-		<source src="https://supernicedigitalltdmediabucket.s3.eu-north-1.amazonaws.com/Reel+Draft+Compress+New.mp4" type="video/mp4">
-		</video>
+		<video id="bg-video" autoplay muted loop playsinline crossorigin="anonymous"
+	style="
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		object-fit: cover;
+		z-index: -1;
+	">
+
 		
 
 		
@@ -467,8 +475,8 @@
 				material.userData.shader.uniforms.time.value = performance.now() * 0.001;
 				}
 
-				pointLight.position.x = 2500 * Math.cos( r );
-				pointLight.position.z = 2500 * Math.sin( r );
+				//pointLight.position.x = 2500 * Math.cos( r );
+				//pointLight.position.z = 2500 * Math.sin( r );
 
 				r += 0.01;
 
@@ -480,6 +488,20 @@
 
 		</script>
 
+
+		<script>
+		//sync reflection map with bg vid in framer
+
+		window.addEventListener("message", (event) => {
+		if (event.data === "playVideo") {
+			const video = document.getElementById("bg-video");
+			if (video) {
+			video.currentTime = 0;
+			video.play();
+			}
+		}
+		});
+		</script>
 	</body>
 
 </html>
