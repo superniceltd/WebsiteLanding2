@@ -200,10 +200,10 @@
 				const height = 1000;
 				const segments = 64;
 
-				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, 0, Math.PI);
+				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, false, 0, Math.PI);
 				geometry.scale(1, 3, 1); // Invert normals to face inward
 
-				const leftGeometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, Math.PI, Math.PI);
+				const leftGeometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, false, Math.PI, Math.PI);
 				leftGeometry.scale(1, 3, 1);
 
 				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
@@ -244,10 +244,10 @@
 				ambientLight = new THREE.AmbientLight( 0xffffff, settings.ambientIntensity );
 				scene.add( ambientLight );
 
-				pointLight = new THREE.PointLight( 0x66FF66, 3, 0, 0 );
+				/*pointLight = new THREE.PointLight( 0x66FF66, 3, 0, 0 );
 				pointLight.position.z = 2500;
 				scene.add( pointLight );
-
+*/
 				/*const pointLight2 = new THREE.PointLight( 0x66FF66, 3, 0, 0 );
 				camera.add( pointLight2 );
 
