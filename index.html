@@ -498,20 +498,6 @@
 
 		</script>
 
-
-		<script>
-		//sync reflection map with bg vid in framer
-
-		window.addEventListener("message", (event) => {
-		if (event.data === "playVideo") {
-			const video = document.getElementById("bg-video");
-			if (video) {
-			video.currentTime = 0;
-			video.play();
-			}
-		}
-		});
-		</script>
 	</body>
 
 </html>
