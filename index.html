@@ -210,9 +210,11 @@
 				const videoMesh = new THREE.Mesh(geometry, videoMat);
 				//videoMesh.layers.set(1);
 				videoMesh.position.z = 0//-200; // adjust as needed
+				videoMesh.rotation.y = Math.PI / 2;
 				scene.add(videoMesh);
 
 				const leftVideoMesh = new THREE.Mesh(leftGeometry, videoMat.clone());
+				leftVideoMesh.rotation.y = Math.PI / 2;
 				scene.add(leftVideoMesh);
 
 				// Cube Camera for dynamic reflections
