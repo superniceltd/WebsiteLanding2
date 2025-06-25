@@ -203,11 +203,17 @@
 				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, 0, Math.PI);
 				geometry.scale(1, 1, 1); // Invert normals to face inward
 
+				const leftGeometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, true, Math.PI, Math.PI);
+				leftGeometry.scale(1, 1, 1);
+
 				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
 				const videoMesh = new THREE.Mesh(geometry, videoMat);
 				//videoMesh.layers.set(1);
 				videoMesh.position.z = 0//-200; // adjust as needed
 				scene.add(videoMesh);
+
+				const leftVideoMesh = new THREE.Mesh(leftGeometry, videoMat.clone());
+				scene.add(leftVideoMesh);
 
 				// Cube Camera for dynamic reflections
 				cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
