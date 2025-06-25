@@ -201,14 +201,14 @@
 				const segments = 64;
 
 				const geometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, false, 0, Math.PI);
-				geometry.scale(1, 3, 1); // Invert normals to face inward
+				geometry.scale(1, 2, 1); // Invert normals to face inward
 
 				const leftGeometry = new THREE.CylinderGeometry(radius, radius, height, segments, 1, false, Math.PI, Math.PI);
-				leftGeometry.scale(1, 3, 1);
+				leftGeometry.scale(1, 2, 1);
 
 				const videoMat = new THREE.MeshBasicMaterial({ map: videoTex, side: THREE.BackSide });
 				const videoMesh = new THREE.Mesh(geometry, videoMat);
-				//videoMesh.layers.set(1);
+				videoMesh.layers.set(1);
 				videoMesh.position.z = 0//-200; // adjust as needed
 				videoMesh.rotation.y = Math.PI / 2;
 				scene.add(videoMesh);
@@ -224,7 +224,7 @@
 				minFilter: THREE.LinearMipmapLinearFilter
 				});
 				cubeCamera = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
-				//cubeCamera.layers.set(1);
+				cubeCamera.layers.set(1);
 
 				// We'll attach the cubeCamera update logic later
 
