@@ -215,6 +215,7 @@
 
 				const leftVideoMesh = new THREE.Mesh(leftGeometry, videoMat.clone());
 				leftVideoMesh.rotation.y = Math.PI / 2;
+				leftVideoMesh.layers.set(1);
 				scene.add(leftVideoMesh);
 
 				// Cube Camera for dynamic reflections
