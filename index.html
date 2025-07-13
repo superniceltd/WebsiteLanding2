@@ -185,8 +185,7 @@
 
 				//
 
-				onWindowResize();
-
+				
 				scene = new THREE.Scene();
 
 				// Create video wall
@@ -369,6 +368,8 @@
 				container.appendChild( stats.dom );
 
 				//
+				
+				onWindowResize();
 
 				window.addEventListener( 'resize', onWindowResize );
 
