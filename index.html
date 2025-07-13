@@ -352,11 +352,19 @@
 				const loader = new OBJLoader();
 				loader.load( 'models/obj/smiley/smiley.obj', function ( group ) {
 
+					const isMobile = window.innerWidth <= 768;
+
 					const geometry = group.children[ 0 ].geometry;
 					geometry.center();
 
 					mesh = new THREE.Mesh( geometry, material );
 					mesh.scale.multiplyScalar( 400 );
+
+					if (isMobile) {
+						mesh.position.y += 100;  // shift up for mobile
+					}
+					
+
 					scene.add( mesh );
 
 				} );
