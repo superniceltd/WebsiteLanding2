@@ -9,8 +9,8 @@ body {
 }
 
 canvas {
- /* background: transparent !important; */
- background: black;
+  background: transparent !important;
+ /*background: black;*/
   z-index: 1;
 }
 
