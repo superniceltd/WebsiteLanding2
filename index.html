@@ -47,6 +47,16 @@
 			let camera, scene, renderer, controls;
 			let cubeCamera, cubeRenderTarget;
 
+			const pointer = new THREE.Vector2(0, 0);       // smoothed position in NDC (-1..1)
+			const pointerTarget = new THREE.Vector2(0, 0); // immediate mouse position
+
+			window.addEventListener('pointermove', (e) => {
+			pointerTarget.set(
+				(e.clientX / window.innerWidth) * 2 - 1,
+				-(e.clientY / window.innerHeight) * 2 + 1
+			);
+			}, { passive: true });
+
 			
 			const noise2D = createNoise2D();
 
@@ -239,10 +249,11 @@
 				camera.position.z = 1500;
 				scene.add( camera );
 
-				controls = new OrbitControls( camera, renderer.domElement );
+				/*controls = new OrbitControls( camera, renderer.domElement );
 				controls.enableZoom = false;
 				controls.enableDamping = true;
 				controls.enablePan = false;
+				*/
 
 				// lights
 
@@ -480,7 +491,16 @@
 			}
 
 			function render() {
+				
+				// Smooth the pointer so it feels nice
+				pointer.lerp(pointerTarget, 0.12);
 
+				// Optional: make the object follow the cursor (feels responsive immediately)
+				if (mesh) {
+				mesh.rotation.y = pointer.x * 0.6;   // left/right
+				mesh.rotation.x = pointer.y * 0.35;  // up/down
+				}
+			
 				if (mesh && material) {
 				mesh.visible = false; // hide it from its own reflection
 				cubeCamera.position.copy(mesh.position);
