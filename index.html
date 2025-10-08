@@ -89,13 +89,27 @@
 
 			// converts NDC (-1..1) to world space for your orthographic camera
 			function setMeshNDCPosition(nx, ny) {
-			if (!camera || !mesh) return; // guard if called before init finishes
+				if (!camera || !mesh) return; // guard if called before init finishes
 
-			const worldX = THREE.MathUtils.lerp(camera.left,  camera.right,  (nx + 1) * 0.5);
-			const worldY = THREE.MathUtils.lerp(camera.bottom, camera.top,   (ny + 1) * 0.5);
+				const worldX = THREE.MathUtils.lerp(camera.left,  camera.right,  (nx + 1) * 0.5);
+				const worldY = THREE.MathUtils.lerp(camera.bottom, camera.top,   (ny + 1) * 0.5);
 
-			mesh.position.set(worldX, worldY, mesh.position.z);
-			}
+				mesh.position.set(worldX, worldY, mesh.position.z);
+				}
+
+			function updateMeshLayout() {
+				if (!mesh) return;
+
+				const aspect = window.innerWidth / window.innerHeight;
+
+				if (aspect >= 1) {
+					// landscape (≈16:9 or wider)
+					setMeshNDCPosition(0.-4, 0.0);
+				} else {
+					// portrait (≈9:16)
+					setMeshNDCPosition(0.0, 0.0); // centered
+				}
+				}	
 
 			let mesh, material;
 			let noise;
@@ -369,19 +383,7 @@
 
 
 				//
-				function updateMeshLayout() {
-					if (!mesh) return;
-
-					const aspect = window.innerWidth / window.innerHeight;
-
-					if (aspect >= 1) {
-						// landscape (≈16:9 or wider)
-						setMeshNDCPosition(0.-4, 0.0);
-					} else {
-						// portrait (≈9:16)
-						setMeshNDCPosition(0.0, 0.0); // centered
-					}
-					}	
+				
 
 				
 				const loader = new OBJLoader();
