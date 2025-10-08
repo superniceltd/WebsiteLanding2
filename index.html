@@ -87,6 +87,16 @@
 
 			};
 
+			// converts NDC (-1..1) to world space for your orthographic camera
+			function setMeshNDCPosition(nx, ny) {
+			if (!camera || !mesh) return; // guard if called before init finishes
+
+			const worldX = THREE.MathUtils.lerp(camera.left,  camera.right,  (nx + 1) * 0.5);
+			const worldY = THREE.MathUtils.lerp(camera.bottom, camera.top,   (ny + 1) * 0.5);
+
+			mesh.position.set(worldX, worldY, mesh.position.z);
+			}
+
 			let mesh, material;
 			let noise;
 
@@ -391,7 +401,7 @@
 					
 
 					scene.add( mesh );
-					updateMeshLayout()
+					updateMeshLayout();
 
 				} );
 
