@@ -359,7 +359,21 @@
 
 
 				//
+				function updateMeshLayout() {
+					if (!mesh) return;
 
+					const aspect = window.innerWidth / window.innerHeight;
+
+					if (aspect >= 1) {
+						// landscape (≈16:9 or wider)
+						setMeshNDCPosition(-0.4, 0.0);
+					} else {
+						// portrait (≈9:16)
+						setMeshNDCPosition(0.0, 0.0); // centered
+					}
+					}	
+
+				
 				const loader = new OBJLoader();
 				loader.load( 'models/obj/smiley/smiley.obj', function ( group ) {
 
@@ -377,6 +391,7 @@
 					
 
 					scene.add( mesh );
+					updateMeshLayout()
 
 				} );
 
@@ -407,6 +422,7 @@
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
+				updateMeshLayout();
 
 			}
 
